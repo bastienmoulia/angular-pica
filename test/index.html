@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Test angular-pica</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.5/angular.min.js"></script>
+    <script src="https://unpkg.com/pica@4.0.1/dist/pica.min.js"></script>
+    <script src="../dist/angular-pica.js"></script>
+  </head>
+  <body>
+    <pica-img src="lenna.png" width="150" height="150"></pica-img>
+    <script>
+      angular.module('app', ['angularPica']);
+
+      setTimeout(function() {
+        angular.bootstrap(document, ['app']);
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,38 @@
+{
+  "name": "angular-pica",
+  "version": "0.0.1",
+  "description": "Resize image in browser with angularJS",
+  "main": "dist/angular-pica.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rimraf dist && webpack --bail --progress --profile",
+    "start": "http-server -c-1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bastienmoulia/angular-pica.git"
+  },
+  "keywords": [
+    "angularjs",
+    "resize",
+    "image"
+  ],
+  "author": "Bastien Moulia <bastienmoulia@gmail.com> (https://github.com/bastienmoulia/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bastienmoulia/angular-pica/issues"
+  },
+  "homepage": "https://github.com/bastienmoulia/angular-pica#readme",
+  "dependencies": {
+    "angular": "^1.6.6",
+    "pica": "^4.0.1"
+  },
+  "devDependencies": {
+    "@types/angular": "^1.6.34",
+    "http-server": "^0.10.0",
+    "rimraf": "^2.6.2",
+    "ts-loader": "^3.0.2",
+    "typescript": "^2.5.3",
+    "webpack": "^3.7.1"
+  }
+}
