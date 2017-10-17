@@ -6,6 +6,7 @@ class picaImgController implements angular.IController {
   src: string;
   width: number;
   height: number;
+  size: "cover" | "contain";
   canvasWidth: number;
   canvasHeight: number;
   constructor (
@@ -17,7 +18,7 @@ class picaImgController implements angular.IController {
   }
   $onInit() {
     let canvas: any = angular.element(this.$element).find("canvas")[0];
-    let context = canvas.getContext("2d");
+    let context: CanvasRenderingContext2D = canvas.getContext("2d");
 
     let image = new Image();
     image.src = this.src;
@@ -45,7 +46,16 @@ class picaImgController implements angular.IController {
       newCanvas.width = this.canvasWidth;
       this.$timeout(() => {
         this.picaService.resize(oldCanvas, newCanvas).then((resized) => {
-          context.drawImage(resized, 0, 0);
+          let dstX = 0;
+          let dstY = 0;
+          let dstW = this.canvasWidth;
+          let dstH = this.canvasHeight;
+          if (this.size === "contain") {
+            //TODO
+            dstX = 150;
+            dstW = 150;
+          }
+          context.drawImage(resized, dstX, dstY, dstW, dstH);
           //console.log("[angular-pica] Resize image", this.src)
         }, (error) => {
           console.warn("[angular-pica] Error during resizing", error) ;
@@ -64,7 +74,8 @@ export default class picaComponent implements angular.IComponentOptions {
     this.bindings = {
       src: '@',
       height: '<',
-      width: '<'
+      width: '<',
+      size: '@'
     };
     this.controller = picaImgController;
     this.template = `

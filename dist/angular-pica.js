@@ -134,7 +134,16 @@ var picaImgController = /** @class */ (function () {
             newCanvas.width = _this.canvasWidth;
             _this.$timeout(function () {
                 _this.picaService.resize(oldCanvas, newCanvas).then(function (resized) {
-                    context.drawImage(resized, 0, 0);
+                    var dstX = 0;
+                    var dstY = 0;
+                    var dstW = _this.canvasWidth;
+                    var dstH = _this.canvasHeight;
+                    if (_this.size === "contain") {
+                        //TODO
+                        dstX = 150;
+                        dstW = 150;
+                    }
+                    context.drawImage(resized, dstX, dstY, dstW, dstH);
                     //console.log("[angular-pica] Resize image", this.src)
                 }, function (error) {
                     console.warn("[angular-pica] Error during resizing", error);
@@ -149,7 +158,8 @@ var picaComponent = /** @class */ (function () {
         this.bindings = {
             src: '@',
             height: '<',
-            width: '<'
+            width: '<',
+            size: '@'
         };
         this.controller = picaImgController;
         this.template = "\n      <canvas width=\"{{ $ctrl.canvasWidth }}\" height=\"{{ $ctrl.canvasHeight }}\"></canvas>\n    ";
