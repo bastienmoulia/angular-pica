@@ -94,35 +94,51 @@ exports.default = angular
 Object.defineProperty(exports, "__esModule", { value: true });
 var angular = __webpack_require__(0);
 var picaImgController = /** @class */ (function () {
-    picaImgController.$inject = ["picaService", "$element"];
-    function picaImgController(picaService, $element) {
+    picaImgController.$inject = ["picaService", "$timeout", "$element"];
+    function picaImgController(picaService, $timeout, $element) {
         "ngInject";
         this.picaService = picaService;
+        this.$timeout = $timeout;
         this.$element = $element;
     }
     picaImgController.prototype.$onInit = function () {
         var _this = this;
-        console.log(this.$element, this.src, this.width, this.height);
-        //let canvas: any = document.getElementById('viewport');
         var canvas = angular.element(this.$element).find("canvas")[0];
         var context = canvas.getContext("2d");
-        var newCanvas = document.createElement('canvas');
-        newCanvas.height = this.height;
-        newCanvas.width = this.width;
         var image = new Image();
         image.src = this.src;
         image.onload = function () {
-            console.log("image", image, image.width, image.height);
             var oldCanvas = document.createElement('canvas');
             oldCanvas.height = image.height;
             oldCanvas.width = image.width;
             var oldContext = oldCanvas.getContext("2d");
             oldContext.drawImage(image, 0, 0, image.width, image.height);
-            _this.picaService.resize(oldCanvas, newCanvas).then(function (resized) {
-                console.log("resized", resized, resized.getContext("2d"));
-                context.drawImage(resized, 0, 0);
-            }, function (error) {
-                console.error("error", error);
+            var newCanvas = document.createElement('canvas');
+            if (_this.height && _this.width) {
+                _this.canvasHeight = _this.height;
+                _this.canvasWidth = _this.width;
+            }
+            else if (_this.height) {
+                _this.canvasHeight = _this.height;
+                _this.canvasWidth = _this.height * image.height / image.width;
+            }
+            else if (_this.width) {
+                _this.canvasWidth = _this.width;
+                _this.canvasHeight = _this.width * image.width / image.height;
+            }
+            else {
+                _this.canvasHeight = image.height;
+                _this.canvasWidth = image.width;
+            }
+            newCanvas.height = _this.canvasHeight;
+            newCanvas.width = _this.canvasWidth;
+            _this.$timeout(function () {
+                _this.picaService.resize(oldCanvas, newCanvas).then(function (resized) {
+                    context.drawImage(resized, 0, 0);
+                    //console.log("[angular-pica] Resize image", this.src)
+                }, function (error) {
+                    console.warn("[angular-pica] Error during resizing", error);
+                });
             });
         };
     };
@@ -136,7 +152,7 @@ var picaComponent = /** @class */ (function () {
             width: '<'
         };
         this.controller = picaImgController;
-        this.template = "\n      <canvas width=\"{{ $ctrl.width }}\" height=\"{{ $ctrl.height }}\"></canvas>\n    ";
+        this.template = "\n      <canvas width=\"{{ $ctrl.canvasWidth }}\" height=\"{{ $ctrl.canvasHeight }}\"></canvas>\n    ";
     }
     return picaComponent;
 }());
@@ -157,9 +173,7 @@ var default_1 = /** @class */ (function () {
     function default_1($q) {
         "ngInject";
         this.$q = $q;
-        //console.log("pica", pica);
         this.resizer = pica();
-        //console.log("resizer", this.resizer);
     }
     default_1.prototype.resize = function (from, to, options) {
         var deferred = this.$q.defer();

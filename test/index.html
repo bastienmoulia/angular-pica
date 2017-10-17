@@ -11,18 +11,12 @@
   <body>
     <table>
       <tr>
-        <td>Browser resize</td>
-        <td>Angular pica</td>
+        <th></th>
+        <th>Browser resize</th>
+        <th>Angular pica</th>
       </tr>
       <tr>
-        <td>
-          <img src="lenna.png" width="150" height="150">
-        </td>
-        <td>
-          <pica-img src="lenna.png" width="150" height="150"></pica-img>
-        </td>
-      </tr>
-      <tr>
+        <td>Large image</td>
         <td>
           <img src="car.png" width="463" height="242">
         </td>
@@ -31,6 +25,43 @@
         </td>
       </tr>
       <tr>
+        <td>Image without width and height</td>
+        <td>
+          <img src="lenna.png">
+        </td>
+        <td>
+          <pica-img src="lenna.png"></pica-img>
+        </td>
+      </tr>
+      <tr>
+        <td>Image without height</td>
+        <td>
+          <img src="lenna.png" width="150">
+        </td>
+        <td>
+          <pica-img src="lenna.png" width="150"></pica-img>
+        </td>
+      </tr>
+      <tr>
+        <td>Image without width</td>
+        <td>
+          <img src="lenna.png" height="150">
+        </td>
+        <td>
+          <pica-img src="lenna.png" height="150"></pica-img>
+        </td>
+      </tr>
+      <tr>
+        <td>Image with width and height</td>
+        <td>
+          <img src="lenna.png" width="150" height="150">
+        </td>
+        <td>
+          <pica-img src="lenna.png" width="150" height="150"></pica-img>
+        </td>
+      </tr>
+      <tr>
+        <td>Image stretched</td>
         <td>
           <img src="lenna.png" width="450" height="150">
         </td>
@@ -39,6 +70,23 @@
         </td>
       </tr>
       <tr>
+        <td>Image covered</td>
+        <td>
+          <div style="width:450px;height:150px;background-image:url(lenna.png);background-size:cover;background-position:center;"></div>
+        </td>
+        <td>
+          TODO
+        </td>
+      </tr>
+      <tr>
+        <td>Image contained</td>
+        <td>
+          <div style="width:450px;height:150px;background-image:url(lenna.png);background-size:contain;background-repeat:no-repeat;background-position:center;"></div>
+        </td>
+        <td>
+          TODO
+        </td>
+      </tr>
     </table>
     <script>
       angular.module('app', ['angularPica']);
