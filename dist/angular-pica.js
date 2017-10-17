@@ -120,11 +120,11 @@ var picaImgController = /** @class */ (function () {
             }
             else if (_this.height) {
                 _this.canvasHeight = _this.height;
-                _this.canvasWidth = _this.height * image.height / image.width;
+                _this.canvasWidth = _this.height / image.height * image.width;
             }
             else if (_this.width) {
                 _this.canvasWidth = _this.width;
-                _this.canvasHeight = _this.width * image.width / image.height;
+                _this.canvasHeight = _this.width / image.width * image.height;
             }
             else {
                 _this.canvasHeight = image.height;
@@ -132,16 +132,49 @@ var picaImgController = /** @class */ (function () {
             }
             newCanvas.height = _this.canvasHeight;
             newCanvas.width = _this.canvasWidth;
+            var imageRatio = image.width / image.height;
+            var canvasRatio = _this.canvasWidth / _this.canvasHeight;
+            if (_this.size === "contain" && _this.height && _this.width) {
+                if (imageRatio < canvasRatio) {
+                    newCanvas.width = newCanvas.height * imageRatio;
+                }
+                else {
+                    newCanvas.height = newCanvas.width / imageRatio;
+                }
+            }
+            if (_this.size === "cover" && _this.height && _this.width) {
+                var tempX = 0;
+                var tempY = 0;
+                var tempW = image.width;
+                var tempH = image.height;
+                if (imageRatio < canvasRatio) {
+                    tempH = tempW / canvasRatio;
+                    tempY = (image.height - tempH) / 2;
+                }
+                else {
+                    tempW = tempH * canvasRatio;
+                    tempX = (image.width - tempW) / 2;
+                }
+                //console.log("temp", tempW, tempH, tempX, tempY);
+                oldCanvas.height = tempH;
+                oldCanvas.width = tempW;
+                oldContext.drawImage(image, tempX, tempY, tempW, tempH, 0, 0, tempW, tempH);
+            }
+            //console.log("oldCanvas", oldCanvas.width, oldCanvas.height);
+            //console.log("newCanvas", newCanvas.width, newCanvas.height);
             _this.$timeout(function () {
                 _this.picaService.resize(oldCanvas, newCanvas).then(function (resized) {
                     var dstX = 0;
                     var dstY = 0;
-                    var dstW = _this.canvasWidth;
-                    var dstH = _this.canvasHeight;
-                    if (_this.size === "contain") {
-                        //TODO
-                        dstX = 150;
-                        dstW = 150;
+                    var dstW = newCanvas.width;
+                    var dstH = newCanvas.height;
+                    if (_this.size === "contain" && _this.height && _this.width) {
+                        if (imageRatio < canvasRatio) {
+                            dstX = (_this.canvasWidth - dstW) / 2;
+                        }
+                        else {
+                            dstY = (_this.canvasHeight - dstH) / 2;
+                        }
                     }
                     context.drawImage(resized, dstX, dstY, dstW, dstH);
                     //console.log("[angular-pica] Resize image", this.src)

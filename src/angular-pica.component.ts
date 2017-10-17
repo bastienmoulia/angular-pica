@@ -34,26 +34,56 @@ class picaImgController implements angular.IController {
         this.canvasWidth = this.width;
       } else if (this.height) {
         this.canvasHeight = this.height;
-        this.canvasWidth = this.height * image.height / image.width;
+        this.canvasWidth = this.height / image.height * image.width;
       } else if (this.width) {
         this.canvasWidth = this.width;
-        this.canvasHeight = this.width * image.width / image.height;
+        this.canvasHeight = this.width / image.width * image.height;
       } else {
         this.canvasHeight = image.height;
         this.canvasWidth = image.width;
       }
       newCanvas.height = this.canvasHeight;
       newCanvas.width = this.canvasWidth;
+      let imageRatio = image.width / image.height;
+      let canvasRatio = this.canvasWidth / this.canvasHeight;
+      if (this.size === "contain" && this.height && this.width) {
+        if (imageRatio < canvasRatio) {
+          newCanvas.width = newCanvas.height * imageRatio;
+        } else {
+          newCanvas.height = newCanvas.width / imageRatio;
+        }
+      }
+      if (this.size === "cover" && this.height && this.width) {
+        let tempX = 0;
+        let tempY = 0;
+        let tempW = image.width;
+        let tempH = image.height;
+        if (imageRatio < canvasRatio) {
+          tempH = tempW / canvasRatio;
+          tempY = (image.height - tempH) / 2;
+        } else {
+          tempW = tempH * canvasRatio;
+          tempX = (image.width - tempW) / 2;
+        }
+        //console.log("temp", tempW, tempH, tempX, tempY);
+        oldCanvas.height = tempH;
+        oldCanvas.width = tempW;
+        oldContext.drawImage(image, tempX, tempY, tempW, tempH, 0, 0, tempW, tempH);
+      }
+      //console.log("oldCanvas", oldCanvas.width, oldCanvas.height);
+      //console.log("newCanvas", newCanvas.width, newCanvas.height);
       this.$timeout(() => {
         this.picaService.resize(oldCanvas, newCanvas).then((resized) => {
           let dstX = 0;
           let dstY = 0;
-          let dstW = this.canvasWidth;
-          let dstH = this.canvasHeight;
-          if (this.size === "contain") {
-            //TODO
-            dstX = 150;
-            dstW = 150;
+          let dstW = newCanvas.width;
+          let dstH = newCanvas.height;
+          if (this.size === "contain" && this.height && this.width) {
+            if (imageRatio < canvasRatio) {
+              dstX = (this.canvasWidth - dstW) / 2;
+            } else {
+              dstY = (this.canvasHeight - dstH) / 2;
+            }
           }
           context.drawImage(resized, dstX, dstY, dstW, dstH);
           //console.log("[angular-pica] Resize image", this.src)
