@@ -30,6 +30,7 @@
   "devDependencies": {
     "@types/angular": "^1.6.34",
     "http-server": "^0.10.0",
+    "ng-annotate-loader": "^0.6.1",
     "rimraf": "^2.6.2",
     "ts-loader": "^3.0.2",
     "typescript": "^2.5.3",

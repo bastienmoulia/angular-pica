@@ -93,7 +93,9 @@ module.exports = angular;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var picaImgController = /** @class */ (function () {
+    picaImgController.$inject = ["picaService"];
     function picaImgController(picaService) {
+        "ngInject";
         this.picaService = picaService;
     }
     picaImgController.prototype.$onInit = function () {
@@ -148,7 +150,9 @@ exports.default = picaComponent;
 Object.defineProperty(exports, "__esModule", { value: true });
 var pica = __webpack_require__(4);
 var default_1 = /** @class */ (function () {
+    default_1.$inject = ["$q"];
     function default_1($q) {
+        "ngInject";
         this.$q = $q;
         //console.log("pica", pica);
         this.resizer = pica();

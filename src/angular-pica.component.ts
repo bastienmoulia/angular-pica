@@ -5,6 +5,7 @@ class picaImgController implements angular.IController {
   width: number;
   height: number;
   constructor (private picaService: picaService) {
+    "ngInject";
   }
   $onInit() {
     console.log(this.src, this.width, this.height);

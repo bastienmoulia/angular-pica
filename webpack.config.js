@@ -2,14 +2,12 @@ const path = require('path');
 const webpack = require('webpack');
 
 module.exports = {
-  //entry: './src/angular-pica.module.ts',
   entry: {
     "angular-pica": "./src/angular-pica.module.ts",
     "angular-pica.min": "./src/angular-pica.module.ts",
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    //filename: 'angular-pica.js'
     filename: "[name].js"
   },
   resolve: {
@@ -19,7 +17,14 @@ module.exports = {
     rules: [
       {
         test: /\.ts$/,
-        use: 'ts-loader',
+        use: [
+          {
+            loader: "ng-annotate-loader"
+          },
+          {
+            loader: "ts-loader"
+          }
+        ],
         exclude: /node_modules/
       }
     ]

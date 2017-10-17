@@ -28,6 +28,7 @@ export default class {
   constructor (
     private $q: angular.IQService
   ) {
+    "ngInject";
     //console.log("pica", pica);
     this.resizer = pica();
     //console.log("resizer", this.resizer);
