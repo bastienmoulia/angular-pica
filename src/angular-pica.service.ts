@@ -1,4 +1,4 @@
-import * as pica from "pica";
+import * as pica from "pica/dist/pica.js";// TODO: replace by "pica" when https://github.com/nodeca/pica/pull/109
 
 declare var window: any;
 
@@ -29,9 +29,7 @@ export default class {
     private $q: angular.IQService
   ) {
     "ngInject";
-    //console.log("pica", pica);
     this.resizer = pica();
-    //console.log("resizer", this.resizer);
   }
 
   public resize(from: HTMLCanvasElement, to: HTMLCanvasElement, options?: resizeOptions): angular.IPromise<HTMLCanvasElement> {

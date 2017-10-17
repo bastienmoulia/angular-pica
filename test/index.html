@@ -6,8 +6,7 @@
     <title>Test angular-pica</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/es6-promise/4.1.1/es6-promise.auto.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.5/angular.min.js"></script>
-    <script src="https://unpkg.com/pica@4.0.1/dist/pica.min.js"></script>
-    <script src="../dist/angular-pica.min.js"></script>
+    <script src="../dist/angular-pica.js"></script>
   </head>
   <body>
     <table>
@@ -15,22 +14,31 @@
         <td>Browser resize</td>
         <td>Angular pica</td>
       </tr>
-      <!--<tr>
+      <tr>
         <td>
           <img src="lenna.png" width="150" height="150">
         </td>
         <td>
           <pica-img src="lenna.png" width="150" height="150"></pica-img>
         </td>
-      </tr>-->
+      </tr>
       <tr>
-          <td>
-            <img src="car.png" width="463" height="242">
-          </td>
-          <td>
-            <pica-img src="car.png" width="463" height="242"></pica-img>
-          </td>
-        </tr>
+        <td>
+          <img src="car.png" width="463" height="242">
+        </td>
+        <td>
+          <pica-img src="car.png" width="463" height="242"></pica-img>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <img src="lenna.png" width="450" height="150">
+        </td>
+        <td>
+          <pica-img src="lenna.png" width="450" height="150"></pica-img>
+        </td>
+      </tr>
+      <tr>
     </table>
     <script>
       angular.module('app', ['angularPica']);

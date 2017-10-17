@@ -36,7 +36,6 @@ module.exports = {
     })
   ],
   externals: {
-    angular: 'angular',
-    pica: 'pica'
+    angular: 'angular'
   }
 };
