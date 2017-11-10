@@ -24,18 +24,17 @@ export interface resizeBufferOptions {
 }
 
 export default class {
-  resizer: any
   constructor (
     private $q: angular.IQService
   ) {
     "ngInject";
-    this.resizer = pica();
   }
 
   public resize(from: HTMLCanvasElement, to: HTMLCanvasElement, options?: resizeOptions): angular.IPromise<HTMLCanvasElement> {
     let deferred: angular.IDeferred<HTMLCanvasElement> = this.$q.defer();
-    this.resizer.resize(from, to, options).then((to) => {
-      deferred.resolve(to);
+    let resizer = new pica();
+    resizer.resize(from, to, options).then((newCanvas) => {
+      deferred.resolve(newCanvas);
     }, (error) => {
       deferred.reject(error);
     });
@@ -44,7 +43,8 @@ export default class {
 
   public resizeBuffer(options: resizeBufferOptions): angular.IPromise<Uint8Array> {
     let deferred: angular.IDeferred<Uint8Array> = this.$q.defer();
-    this.resizer.resizeBuffer(options).then((output) => {
+    let resizer = new pica();
+    resizer.resizeBuffer(options).then((output) => {
       deferred.resolve(output);
     }, (error) => {
       deferred.reject(error);

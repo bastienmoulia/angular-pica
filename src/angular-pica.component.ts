@@ -17,6 +17,7 @@ class picaImgController implements angular.IController {
     "ngInject";
   }
   $onInit() {
+    //console.log("element", this.$element);
     let canvas: any = angular.element(this.$element).find("canvas")[0];
     let context: CanvasRenderingContext2D = canvas.getContext("2d");
 
@@ -86,7 +87,7 @@ class picaImgController implements angular.IController {
             }
           }
           context.drawImage(resized, dstX, dstY, dstW, dstH);
-          //console.log("[angular-pica] Resize image", this.src)
+          //console.log("[angular-pica] Resize image", this.src, dstX, dstY, dstW, dstH)
         }, (error) => {
           console.warn("[angular-pica] Error during resizing", error) ;
         });
@@ -109,7 +110,7 @@ export default class picaComponent implements angular.IComponentOptions {
     };
     this.controller = picaImgController;
     this.template = `
-      <canvas width="{{ $ctrl.canvasWidth }}" height="{{ $ctrl.canvasHeight }}"></canvas>
+      <canvas width="{{ $ctrl.canvasWidth }}" height="{{ $ctrl.canvasHeight }}" ng-hide="!$ctrl.src"></canvas>
     `;
   }
 };

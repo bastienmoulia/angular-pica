@@ -103,6 +103,7 @@ var picaImgController = /** @class */ (function () {
     }
     picaImgController.prototype.$onInit = function () {
         var _this = this;
+        //console.log("element", this.$element);
         var canvas = angular.element(this.$element).find("canvas")[0];
         var context = canvas.getContext("2d");
         var image = new Image();
@@ -177,7 +178,7 @@ var picaImgController = /** @class */ (function () {
                         }
                     }
                     context.drawImage(resized, dstX, dstY, dstW, dstH);
-                    //console.log("[angular-pica] Resize image", this.src)
+                    //console.log("[angular-pica] Resize image", this.src, dstX, dstY, dstW, dstH)
                 }, function (error) {
                     console.warn("[angular-pica] Error during resizing", error);
                 });
@@ -195,7 +196,7 @@ var picaComponent = /** @class */ (function () {
             size: '@'
         };
         this.controller = picaImgController;
-        this.template = "\n      <canvas width=\"{{ $ctrl.canvasWidth }}\" height=\"{{ $ctrl.canvasHeight }}\"></canvas>\n    ";
+        this.template = "\n      <canvas width=\"{{ $ctrl.canvasWidth }}\" height=\"{{ $ctrl.canvasHeight }}\" ng-hide=\"!$ctrl.src\"></canvas>\n    ";
     }
     return picaComponent;
 }());
@@ -216,12 +217,12 @@ var default_1 = /** @class */ (function () {
     function default_1($q) {
         "ngInject";
         this.$q = $q;
-        this.resizer = pica();
     }
     default_1.prototype.resize = function (from, to, options) {
         var deferred = this.$q.defer();
-        this.resizer.resize(from, to, options).then(function (to) {
-            deferred.resolve(to);
+        var resizer = new pica();
+        resizer.resize(from, to, options).then(function (newCanvas) {
+            deferred.resolve(newCanvas);
         }, function (error) {
             deferred.reject(error);
         });
@@ -229,7 +230,8 @@ var default_1 = /** @class */ (function () {
     };
     default_1.prototype.resizeBuffer = function (options) {
         var deferred = this.$q.defer();
-        this.resizer.resizeBuffer(options).then(function (output) {
+        var resizer = new pica();
+        resizer.resizeBuffer(options).then(function (output) {
             deferred.resolve(output);
         }, function (error) {
             deferred.reject(error);
