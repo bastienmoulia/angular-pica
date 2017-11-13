@@ -74,7 +74,7 @@ class picaImgController implements angular.IController {
       //console.log("oldCanvas", oldCanvas.width, oldCanvas.height);
       //console.log("newCanvas", newCanvas.width, newCanvas.height);
       this.$timeout(() => {
-        this.picaService.resize(oldCanvas, newCanvas).then((resized) => {
+        this.picaService.resizeAsync(oldCanvas, newCanvas).then((resized) => {
           let dstX = 0;
           let dstY = 0;
           let dstW = newCanvas.width;

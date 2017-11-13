@@ -23,11 +23,19 @@ export interface resizeBufferOptions {
   unsharpThreshold?: number;
 }
 
+interface canvasToResize {
+  from: HTMLCanvasElement;
+  to: HTMLCanvasElement;
+  options?: resizeOptions;
+}
+
 export default class {
+  startProcess: boolean;
   constructor (
     private $q: angular.IQService
   ) {
     "ngInject";
+    this.startProcess = false;
   }
 
   public resize(from: HTMLCanvasElement, to: HTMLCanvasElement, options?: resizeOptions): angular.IPromise<HTMLCanvasElement> {
@@ -38,6 +46,29 @@ export default class {
     }, (error) => {
       deferred.reject(error);
     });
+    return deferred.promise;
+  }
+
+  public resizeAsync(from: HTMLCanvasElement, to: HTMLCanvasElement, options?: resizeOptions): angular.IPromise<HTMLCanvasElement> {
+    let deferred: angular.IDeferred<HTMLCanvasElement> = this.$q.defer();
+    if (!this.startProcess) {
+      this.startProcess = true;
+      this.resize(from, to, options).then((newCanvas) => {
+        deferred.resolve(newCanvas);
+        this.startProcess = false;
+      }, (error) => {
+        deferred.reject(error);
+      });
+    } else {
+      setTimeout(() => { 
+        this.resizeAsync(from, to, options).then((newCanvas) => {
+          deferred.resolve(newCanvas);
+          this.startProcess = false;
+        }, (error) => {
+          deferred.reject(error);
+        });
+      }, 50);
+    }
     return deferred.promise;
   }
 

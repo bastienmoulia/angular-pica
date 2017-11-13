@@ -164,7 +164,7 @@ var picaImgController = /** @class */ (function () {
             //console.log("oldCanvas", oldCanvas.width, oldCanvas.height);
             //console.log("newCanvas", newCanvas.width, newCanvas.height);
             _this.$timeout(function () {
-                _this.picaService.resize(oldCanvas, newCanvas).then(function (resized) {
+                _this.picaService.resizeAsync(oldCanvas, newCanvas).then(function (resized) {
                     var dstX = 0;
                     var dstY = 0;
                     var dstW = newCanvas.width;
@@ -217,6 +217,7 @@ var default_1 = /** @class */ (function () {
     function default_1($q) {
         "ngInject";
         this.$q = $q;
+        this.startProcess = false;
     }
     default_1.prototype.resize = function (from, to, options) {
         var deferred = this.$q.defer();
@@ -226,6 +227,30 @@ var default_1 = /** @class */ (function () {
         }, function (error) {
             deferred.reject(error);
         });
+        return deferred.promise;
+    };
+    default_1.prototype.resizeAsync = function (from, to, options) {
+        var _this = this;
+        var deferred = this.$q.defer();
+        if (!this.startProcess) {
+            this.startProcess = true;
+            this.resize(from, to, options).then(function (newCanvas) {
+                deferred.resolve(newCanvas);
+                _this.startProcess = false;
+            }, function (error) {
+                deferred.reject(error);
+            });
+        }
+        else {
+            setTimeout(function () {
+                _this.resizeAsync(from, to, options).then(function (newCanvas) {
+                    deferred.resolve(newCanvas);
+                    _this.startProcess = false;
+                }, function (error) {
+                    deferred.reject(error);
+                });
+            }, 50);
+        }
         return deferred.promise;
     };
     default_1.prototype.resizeBuffer = function (options) {
